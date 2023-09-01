@@ -10,28 +10,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.mysmarthouse.dao.HouseDatabase
 import com.example.mysmarthouse.presentation.theme.MySmartHouseTheme
 
 class MainActivity : ComponentActivity() {
+    lateinit var myDb: HouseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        myDb = HouseDatabase.getInstance(this)
         setContent {
-            WearApp()
+            WearApp(myDb)
         }
     }
 }
 
 @Composable
-fun WearApp() {
+fun WearApp(myDb: HouseDatabase) {
     MySmartHouseTheme {
-        Navigation()
+        Navigation(myDb)
     }
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp()
 }
