@@ -1,6 +1,7 @@
 package com.example.mysmarthouse.dao
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -8,7 +9,11 @@ import com.example.mysmarthouse.models.Setting
 
 @Database(
     entities = [Setting::class],
-    version = 1
+    version = 3,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(2,3)
+    ]
 )
 abstract class HouseDatabase: RoomDatabase() {
     abstract val dao: SettingDao
