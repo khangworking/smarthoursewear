@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
     tableName = "settings"
 )
 data class Setting(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "key") val key: String?,
     @ColumnInfo(name = "value") val value: String?
 )
