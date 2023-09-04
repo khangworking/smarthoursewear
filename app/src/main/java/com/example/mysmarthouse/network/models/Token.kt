@@ -1,4 +1,4 @@
-package com.example.mysmarthouse.models.tuya
+package com.example.mysmarthouse.network.models
 
 data class Token(
     val access_token: String,
