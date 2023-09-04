@@ -5,6 +5,7 @@ object Constants {
     const val CLIENT_ID = "ed5ddmaac3hedphgsget"
     const val CLIENT_SECRET = "c1629857510f4a00b9c783a63765f426"
     const val SIGN_METHOD = "HMAC-SHA256"
+    const val USER_UID = "az1667534243992o8eqK"
 
     object TuyaHeaderKeys {
         const val CLIENT_ID = "client_id"
