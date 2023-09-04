@@ -5,14 +5,15 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.mysmarthouse.models.Device
 import com.example.mysmarthouse.models.Setting
 
 @Database(
-    entities = [Setting::class],
-    version = 3,
+    entities = [Setting::class, Device::class],
+    version = 4,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration(2,3)
+        AutoMigration(3,4)
     ]
 )
 abstract class HouseDatabase: RoomDatabase() {
