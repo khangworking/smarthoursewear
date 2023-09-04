@@ -5,6 +5,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.example.mysmarthouse.dao.HouseDatabase
+import com.example.mysmarthouse.presentation.screens.DeviceStatusScreen
 import com.example.mysmarthouse.presentation.screens.DevicesScreen
 import com.example.mysmarthouse.presentation.screens.ScenesScreen
 import com.example.mysmarthouse.presentation.screens.TopScreen
@@ -24,6 +25,13 @@ fun Navigation(myDb: HouseDatabase) {
         }
         composable(route = Screen.ScenesScreen.route) {
             ScenesScreen(navController = navController)
+        }
+        composable(route = Screen.DeviceStatusScreen.route) {
+            DeviceStatusScreen(
+                navController = navController,
+                database = myDb,
+                deviceTuyaId = it.arguments?.getString("deviceId")!!
+            )
         }
     }
 }

@@ -65,7 +65,9 @@ fun DevicesScreen(navController: NavController, myDb: HouseDatabase) {
             for (device in viewModel.devices) {
                 item {
                     Chip(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            navController.navigate("devices/${device.tuyaId}/status")
+                        },
                         colors = ChipDefaults.chipColors(
                             backgroundColor = Color.DarkGray,
                             contentColor = Color.White,
