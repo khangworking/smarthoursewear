@@ -12,6 +12,15 @@ import com.example.mysmarthouse.utils.TuyaCloudApi
 import retrofit2.Response
 
 class TokenRepository(private val dao: SettingDao) {
+    suspend fun getToken(): String {
+        val expireSetting = dao.find(Constants.SettingKeys.EXPIRE_TIME)
+        if (expireSetting.value!!.toLong() < System.currentTimeMillis()) {
+            reloadToken()
+        }
+        val setting = dao.find(Constants.SettingKeys.ACCESS_TOKEN)
+        return setting.value!!
+    }
+
     suspend fun requestToken(): Response<Result<Token>> {
         val tokenApi = TuyaCloudApi.getInstace().create(TokenApi::class.java)
         val time = Helper.getTime()
