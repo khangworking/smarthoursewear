@@ -15,8 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-val TAG = "MyAppLog"
-
 class WelcomeViewModel(
     private val dao: SettingDao
 ):ViewModel() {
@@ -36,26 +34,29 @@ class WelcomeViewModel(
         )
 
         GlobalScope.launch(Dispatchers.IO) {
-            Log.d(TAG, "Process token")
             val results = tokenApi.getToken(sign = sign, t = time)
-            if (results != null) {
-                Log.d(TAG, results.body().toString())
-                val result = results.body()!!.result
-                Log.d(TAG, result.toString())
-            }
-            val setting = dao.find("access_token")
+
+            var setting = dao.find(Constants.SettingKeys.ACCESS_TOKEN)
             if (setting != null) {
-                Log.d(TAG, setting.value!!)
                 setting.value = results.body()!!.result?.accessToken
                 dao.upsertSetting(setting)
             } else {
-                val setting = Setting(key = "access_token", value= results.body()!!.result?.accessToken)
+                val setting = Setting(key = Constants.SettingKeys.ACCESS_TOKEN, value= results.body()!!.result?.accessToken)
                 dao.upsertSetting(setting)
-                Log.d(TAG, "Not found setting object")
             }
 
+            setting = dao.find(Constants.SettingKeys.EXPIRE_TIME)
+            val millis = System.currentTimeMillis() + (results.body()!!.result?.expireTime?.times(
+                1000
+            ) ?: 0)
+            if (setting != null) {
+                setting.value = millis.toString()
+                dao.upsertSetting(setting)
+            } else {
+                setting = Setting(key = Constants.SettingKeys.EXPIRE_TIME, value= millis.toString())
+                dao.upsertSetting(setting)
+            }
         }
-        Log.d(TAG, "refreshToken")
     }
 }
 
