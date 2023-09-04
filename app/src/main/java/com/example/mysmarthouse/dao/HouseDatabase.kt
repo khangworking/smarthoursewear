@@ -18,6 +18,7 @@ import com.example.mysmarthouse.models.Setting
 )
 abstract class HouseDatabase: RoomDatabase() {
     abstract val dao: SettingDao
+    abstract val deviceDao: DeviceDao
 
     companion object {
         private var INSTANCE: HouseDatabase? = null

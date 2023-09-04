@@ -68,5 +68,9 @@ class Helper {
             }
             return String(hexChars)
         }
+
+        fun logTagName(): String {
+            return "MyAppLog"
+        }
     }
 }
