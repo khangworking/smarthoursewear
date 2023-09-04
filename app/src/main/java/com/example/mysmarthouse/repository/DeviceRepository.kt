@@ -19,21 +19,39 @@ class DeviceRepository(private val database: HouseDatabase) {
         return deviceDao.getDevices()
     }
 
-    suspend fun fetchAndSaveDevices() {
-        val deviceApi = TuyaCloudApi.getInstace().create(DeviceApi::class.java)
-        val dao = database.dao
-        val deviceDao = database.deviceDao
-        val setting = dao.find(Constants.SettingKeys.ACCESS_TOKEN)
+    suspend fun getStatuses(deviceId: String) {
         val time = Helper.getTime()
+        var token = token()
         val sign = Helper.sign(
             clientId = Constants.CLIENT_ID,
             secret = Constants.CLIENT_SECRET,
             t = time.toString(),
-            accessToken = setting.value!!,
+            accessToken = token,
+            nonce = null,
+            stringToSign = Helper.stringToSign(signUrl = "/v1.0/devices/$deviceId/status")
+        )
+        val results = apiClient().getDeviceStatus(
+            sign = sign,
+            t = time,
+            accessToken = token,
+            deviceId = deviceId
+        )
+        Log.d(Helper.logTagName(), results.body().toString())
+    }
+
+    private suspend fun fetchAndSaveDevices() {
+        val deviceDao = database.deviceDao
+        val time = Helper.getTime()
+        val token = token()
+        val sign = Helper.sign(
+            clientId = Constants.CLIENT_ID,
+            secret = Constants.CLIENT_SECRET,
+            t = time.toString(),
+            accessToken = token,
             nonce = null,
             stringToSign = Helper.stringToSign(signUrl = "/v1.0/users/${Constants.USER_UID}/devices")
         )
-        val results = deviceApi.getDevicesByUser(sign = sign, t = time, accessToken = setting.value!!)
+        val results = apiClient().getDevicesByUser(sign = sign, t = time, accessToken = token)
         if (results.isSuccessful) {
             val devicesResponse = results.body()!!.result
             for (device in devicesResponse!!) {
@@ -42,7 +60,8 @@ class DeviceRepository(private val database: HouseDatabase) {
                     record = Device(
                         tuyaId = device.id,
                         name = device.name,
-                        icon = device.icon
+                        icon = device.icon,
+                        category = device.category
                     )
                 }
                 deviceDao.upsertDevice(record)
@@ -50,5 +69,15 @@ class DeviceRepository(private val database: HouseDatabase) {
         } else {
             Log.d(Helper.logTagName(), "Cannot fetch devices")
         }
+    }
+
+    private suspend fun apiClient(): DeviceApi {
+        return TuyaCloudApi.getInstace().create(DeviceApi::class.java)
+    }
+
+    private suspend fun token():String {
+        val dao = database.dao
+        val setting = dao.find(Constants.SettingKeys.ACCESS_TOKEN)
+        return setting.value!!
     }
 }

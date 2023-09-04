@@ -10,5 +10,8 @@ data class Device(
     val name: String,
 
     @SerializedName("icon")
-    val icon: String
+    val icon: String,
+
+    @SerializedName("category")
+    val category: String
 )

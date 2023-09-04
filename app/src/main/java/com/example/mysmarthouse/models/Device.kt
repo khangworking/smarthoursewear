@@ -11,5 +11,6 @@ data class Device(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "tuya_id") var tuyaId: String,
     @ColumnInfo(name = "name") var name: String,
-    @ColumnInfo(name = "icon") var icon: String
+    @ColumnInfo(name = "icon") var icon: String,
+    @ColumnInfo(name = "category") var category: String? = null
 )

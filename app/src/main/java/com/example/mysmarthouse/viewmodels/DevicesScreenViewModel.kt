@@ -25,17 +25,12 @@ import kotlinx.coroutines.withContext
 class DevicesScreenViewModel(
     private val database: HouseDatabase
 ): ViewModel() {
-    init {
-        val dao = database.dao
-    }
     var loading by mutableStateOf(true)
         private set
     var devices by mutableStateOf<List<Device>>(emptyList())
         private set
 
     fun loadDevicesList() {
-        Log.d(Helper.logTagName(), "loadDevicesList")
-
         viewModelScope.launch {
             devices = DeviceRepository(database).getItems()
             loading = false
