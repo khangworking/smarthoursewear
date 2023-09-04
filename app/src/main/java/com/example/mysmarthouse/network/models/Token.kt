@@ -1,8 +1,11 @@
 package com.example.mysmarthouse.network.models
 
+import com.google.gson.annotations.SerializedName
+
 data class Token(
-    val access_token: String,
-    val expire_time: Int,
-    val refresh_token: String,
-    val uid: String
+    @SerializedName("access_token")
+    val accessToken: String,
+
+    @SerializedName("expire_time")
+    val expireTime: Int
 )

@@ -46,10 +46,10 @@ class WelcomeViewModel(
             val setting = dao.find("access_token")
             if (setting != null) {
                 Log.d(TAG, setting.value!!)
-                setting.value = results.body()!!.result?.access_token
+                setting.value = results.body()!!.result?.accessToken
                 dao.upsertSetting(setting)
             } else {
-                val setting = Setting(key = "access_token", value= results.body()!!.result?.access_token)
+                val setting = Setting(key = "access_token", value= results.body()!!.result?.accessToken)
                 dao.upsertSetting(setting)
                 Log.d(TAG, "Not found setting object")
             }
