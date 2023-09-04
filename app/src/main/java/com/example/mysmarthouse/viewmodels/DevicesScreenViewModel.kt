@@ -12,6 +12,7 @@ import com.example.mysmarthouse.dao.SettingDao
 import com.example.mysmarthouse.models.Device
 import com.example.mysmarthouse.network.endpoints.DeviceApi
 import com.example.mysmarthouse.network.endpoints.TokenApi
+import com.example.mysmarthouse.repository.DeviceRepository
 import com.example.mysmarthouse.utils.Constants
 import com.example.mysmarthouse.utils.Helper
 import com.example.mysmarthouse.utils.TuyaCloudApi
@@ -36,53 +37,9 @@ class DevicesScreenViewModel(
         Log.d(Helper.logTagName(), "loadDevicesList")
 
         viewModelScope.launch {
-            val dao = database.deviceDao
-            val devices = dao.getDevices()
-            if (devices.count() <= 0) {
-                fetchAndSaveDevices()
-            }
-            setDevices()
+            devices = DeviceRepository(database).getItems()
             loading = false
         }
-    }
-
-    suspend fun fetchAndSaveDevices() {
-        val deviceApi = TuyaCloudApi.getInstace().create(DeviceApi::class.java)
-        val dao = database.dao
-        val deviceDao = database.deviceDao
-        val setting = dao.find("access_token")
-        val time = Helper.getTime()
-        val sign = Helper.sign(
-            clientId = Constants.CLIENT_ID,
-            secret = Constants.CLIENT_SECRET,
-            t = time.toString(),
-            accessToken = setting.value!!,
-            nonce = null,
-            stringToSign = Helper.stringToSign(signUrl = "/v1.0/users/${Constants.USER_UID}/devices")
-        )
-        val results = deviceApi.getDevicesByUser(sign = sign, t = time, accessToken = setting.value!!)
-        if (results.isSuccessful) {
-            val devicesResponse = results.body()!!.result
-            for (device in devicesResponse!!) {
-                var record = deviceDao.findByTuyaId(device.id)
-                if (record == null) {
-                    record = Device(
-                        tuyaId = device.id,
-                        name = device.name,
-                        icon = device.icon
-                    )
-                }
-                deviceDao.upsertDevice(record)
-            }
-        } else {
-            Log.d(Helper.logTagName(), "Cannot fetch devices")
-        }
-    }
-
-    suspend fun setDevices() {
-        val deviceDao = database.deviceDao
-        devices = deviceDao.getDevices()
-        Log.d(Helper.logTagName(), devices.count().toString())
     }
 }
 
