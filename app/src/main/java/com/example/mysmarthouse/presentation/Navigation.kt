@@ -20,7 +20,7 @@ fun Navigation(myDb: HouseDatabase) {
             TopScreen(navController = navController, myDb)
         }
         composable(route = Screen.DevicesScreen.route) {
-            DevicesScreen(navController = navController)
+            DevicesScreen(navController = navController, myDb)
         }
         composable(route = Screen.ScenesScreen.route) {
             ScenesScreen(navController = navController)
