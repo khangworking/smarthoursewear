@@ -28,14 +28,10 @@ abstract class HouseDatabase: RoomDatabase() {
                         context.applicationContext,
                         HouseDatabase::class.java,
                         "HouseDB"
-                    ).allowMainThreadQueries().build()
+                    ).fallbackToDestructiveMigration().build()
                 }
             }
             return INSTANCE!!
-        }
-
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 }
