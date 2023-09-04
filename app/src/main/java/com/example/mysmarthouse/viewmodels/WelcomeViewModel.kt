@@ -3,16 +3,14 @@ package com.example.mysmarthouse.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.mysmarthouse.api.TokenApi
+import com.example.mysmarthouse.network.endpoints.TokenApi
 import com.example.mysmarthouse.dao.SettingDao
 import com.example.mysmarthouse.models.Setting
-import com.example.mysmarthouse.models.tuya.Token
 import com.example.mysmarthouse.utils.Constants
 import com.example.mysmarthouse.utils.Helper
 import com.example.mysmarthouse.utils.TuyaCloudApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
