@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -54,25 +55,28 @@ fun DevicesScreen(navController: NavController, myDb: HouseDatabase) {
                 .background(MaterialTheme.colors.background),
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding = PaddingValues(
-                top = 40.dp,
+                top = 50.dp,
                 start = 5.dp,
                 end = 5.dp,
                 bottom = 40.dp
             ),
             state = scalingLazyColumnState
         ) {
-            items(10) { index ->
-                Chip(
-                    onClick = { /*TODO*/ },
-                    colors = ChipDefaults.chipColors(
-                        backgroundColor = Color.DarkGray,
-                        contentColor = Color.White,
-                        iconColor = Color.White
-                    ),
-                    label = {
-                        Text(text = "Device $index")
-                    }
-                )
+            for (device in viewModel.devices) {
+                item {
+                    Chip(
+                        onClick = { /*TODO*/ },
+                        colors = ChipDefaults.chipColors(
+                            backgroundColor = Color.DarkGray,
+                            contentColor = Color.White,
+                            iconColor = Color.White
+                        ),
+                        label = {
+                            Text(text = device.name)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
