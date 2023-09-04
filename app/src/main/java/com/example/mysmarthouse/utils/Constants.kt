@@ -18,4 +18,9 @@ object Constants {
     object Endpoints {
         const val GET_ACCESS_TOKEN = "/v1.0/token?grant_type=1"
     }
+
+    object SettingKeys {
+        const val ACCESS_TOKEN = "access_token"
+        const val EXPIRE_TIME = "expire_time"
+    }
 }
