@@ -10,5 +10,5 @@ import androidx.room.PrimaryKey
 data class Setting(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "key") val key: String?,
-    @ColumnInfo(name = "value") val value: String?
+    @ColumnInfo(name = "value") var value: String?
 )

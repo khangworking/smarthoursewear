@@ -38,11 +38,10 @@ class DevicesScreenViewModel(
         viewModelScope.launch {
             val dao = database.deviceDao
             val devices = dao.getDevices()
-            if (devices.count() > 0) {
-                setDevices()
-            } else {
+            if (devices.count() <= 0) {
                 fetchAndSaveDevices()
             }
+            setDevices()
             loading = false
         }
     }
