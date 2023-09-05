@@ -22,6 +22,38 @@ class SceneRepository(private val database: HouseDatabase) {
         return sceneDao.getAllScenes()
     }
 
+    suspend fun execScene(sceneId: String) {
+        val time = Helper.getTime()
+        var token = TokenRepository(database.dao).getToken()
+        val sign = Helper.sign(
+            clientId = Constants.CLIENT_ID,
+            secret = Constants.CLIENT_SECRET,
+            t = time.toString(),
+            accessToken = token,
+            nonce = null,
+            stringToSign = Helper.stringToSign(
+                signUrl = "/v1.0/homes/${Constants.HOME_ID}/scenes/$sceneId/trigger",
+                method = "POST"
+            )
+        )
+        val response = apiClient().triggerScene(
+            sign = sign,
+            t = time,
+            accessToken = token,
+            sceneId = sceneId
+        )
+        if (!response.isSuccessful) {
+            Log.d(Helper.logTagName(), "Fail to exec")
+            return
+        }
+
+        if (response.body()!!.result!!) {
+            Log.d(Helper.logTagName(), "Success")
+        } else {
+            Log.d(Helper.logTagName(), "Cannot exec")
+        }
+    }
+
     suspend fun fetchScenes(): Response<Result<List<Scene>>> {
         val time = Helper.getTime()
         var token = TokenRepository(database.dao).getToken()

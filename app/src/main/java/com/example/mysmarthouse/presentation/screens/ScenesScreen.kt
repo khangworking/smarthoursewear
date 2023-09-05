@@ -61,7 +61,7 @@ fun ScenesScreen(navController: NavController, database: HouseDatabase) {
             for (scene in viewModel.scenes) {
                 item {
                     Chip(
-                        onClick = { /*TODO*/ },
+                        onClick = { viewModel.execScene(scene.tuyaId) },
                         colors = ChipDefaults.chipColors(
                             backgroundColor = Color.DarkGray,
                             contentColor = Color.White,

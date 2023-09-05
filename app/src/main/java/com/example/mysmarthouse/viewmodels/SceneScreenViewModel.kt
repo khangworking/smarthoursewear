@@ -26,6 +26,12 @@ class SceneScreenViewModel(
             loading = false
         }
     }
+
+    fun execScene(sceneId: String) {
+        viewModelScope.launch {
+            SceneRepository(database).execScene(sceneId)
+        }
+    }
 }
 
 class SceneScreenViewModelFactory(
