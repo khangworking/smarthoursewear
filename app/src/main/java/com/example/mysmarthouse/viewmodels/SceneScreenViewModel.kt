@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mysmarthouse.dao.HouseDatabase
+import com.example.mysmarthouse.models.Scene
 import com.example.mysmarthouse.repository.SceneRepository
 import kotlinx.coroutines.launch
 
@@ -16,9 +17,13 @@ class SceneScreenViewModel(
     var loading by mutableStateOf(true)
         private set
 
+    var scenes by mutableStateOf<List<Scene>>(emptyList())
+        private set
+
     fun loadScenes() {
         viewModelScope.launch {
-            SceneRepository(database).getScenes()
+            scenes = SceneRepository(database).loadScenes()
+            loading = false
         }
     }
 }

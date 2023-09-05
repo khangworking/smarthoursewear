@@ -6,19 +6,21 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.mysmarthouse.models.Device
+import com.example.mysmarthouse.models.Scene
 import com.example.mysmarthouse.models.Setting
 
 @Database(
-    entities = [Setting::class, Device::class],
-    version = 5,
+    entities = [Setting::class, Device::class, Scene::class],
+    version = 7,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration(4,5)
+        AutoMigration(6,7)
     ]
 )
 abstract class HouseDatabase: RoomDatabase() {
     abstract val dao: SettingDao
     abstract val deviceDao: DeviceDao
+    abstract val sceneDao: SceneDao
 
     companion object {
         private var INSTANCE: HouseDatabase? = null

@@ -21,8 +21,7 @@ class DeviceRepository(private val database: HouseDatabase) {
         if (devices.count() <= 0) {
             fetchAndSaveDevices()
         }
-        val deviceDao = database.deviceDao
-        return deviceDao.getDevices()
+        return dao.getDevices()
     }
 
     suspend fun getStatuses(deviceId: String): List<DeviceStatus> {
