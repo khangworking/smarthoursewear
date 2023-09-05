@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.mysmarthouse.dao.HouseDatabase
+import com.example.mysmarthouse.models.Device
 import com.example.mysmarthouse.network.models.DeviceStatus
 import com.example.mysmarthouse.repository.DeviceRepository
 import kotlinx.coroutines.launch
@@ -22,7 +23,18 @@ class DeviceStatusScreenViewModel(
 
     fun loadStatuses() {
         viewModelScope.launch {
-            DeviceRepository(database = database).getStatuses(deviceId = deviceId)
+            statuses = DeviceRepository(database = database).getStatuses(deviceId = deviceId)
+            loading = false
+        }
+    }
+
+    fun changeDeviceStatus(deviceTuyaId: String, key: String, value: Boolean) {
+        viewModelScope.launch {
+            DeviceRepository(database = database).sendCommand(
+                deviceTuyaId = deviceTuyaId,
+                key = key,
+                value = value
+            )
         }
     }
 }

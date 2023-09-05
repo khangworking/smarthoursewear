@@ -5,10 +5,13 @@ import com.example.mysmarthouse.dao.DeviceDao
 import com.example.mysmarthouse.dao.HouseDatabase
 import com.example.mysmarthouse.models.Device
 import com.example.mysmarthouse.network.endpoints.DeviceApi
+import com.example.mysmarthouse.network.models.DeviceCommand
+import com.example.mysmarthouse.network.models.DeviceStatus
 import com.example.mysmarthouse.network.models.Result
 import com.example.mysmarthouse.utils.Constants
 import com.example.mysmarthouse.utils.Helper
 import com.example.mysmarthouse.utils.TuyaCloudApi
+import com.google.gson.Gson
 import retrofit2.Response
 
 class DeviceRepository(private val database: HouseDatabase) {
@@ -22,7 +25,7 @@ class DeviceRepository(private val database: HouseDatabase) {
         return deviceDao.getDevices()
     }
 
-    suspend fun getStatuses(deviceId: String) {
+    suspend fun getStatuses(deviceId: String): List<DeviceStatus> {
         val time = Helper.getTime()
         var token = token()
         val sign = Helper.sign(
@@ -33,13 +36,48 @@ class DeviceRepository(private val database: HouseDatabase) {
             nonce = null,
             stringToSign = Helper.stringToSign(signUrl = "/v1.0/devices/$deviceId/status")
         )
-        val results = apiClient().getDeviceStatus(
+        val response = apiClient().getDeviceStatus(
             sign = sign,
             t = time,
             accessToken = token,
             deviceId = deviceId
         )
-        Log.d(Helper.logTagName(), results.body().toString())
+        val responseBody = response.body()!!
+        if (responseBody.result != null) {
+            return responseBody.result!!
+        }
+        Log.d(Helper.logTagName(), responseBody.msg!!)
+        return emptyList()
+    }
+
+    suspend fun sendCommand(deviceTuyaId: String, key: String, value: Boolean) {
+        val time = Helper.getTime()
+        val token = token()
+        val requestBody = DeviceCommand(
+            commands = listOf(DeviceStatus(code = key, value = value))
+        )
+        val contentBody = Gson().toJson(requestBody)
+        val stringToSign = Helper.stringToSign(
+            signUrl = "/v1.0/devices/${deviceTuyaId}/commands",
+            method = "POST",
+            contentBody = contentBody
+        )
+        val sign = Helper.sign(
+            clientId = Constants.CLIENT_ID,
+            secret = Constants.CLIENT_SECRET,
+            t = time.toString(),
+            accessToken = token,
+            nonce = null,
+            stringToSign = stringToSign
+        )
+        val response = apiClient().sendCommand(
+            sign = sign,
+            t = time,
+            accessToken = token,
+            deviceId = deviceTuyaId,
+            commands = requestBody
+        )
+        Log.d(Helper.logTagName(), response.toString())
     }
 
     private suspend fun fetchAndSaveDevices() {
