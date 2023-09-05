@@ -24,7 +24,7 @@ fun Navigation(myDb: HouseDatabase) {
             DevicesScreen(navController = navController, myDb)
         }
         composable(route = Screen.ScenesScreen.route) {
-            ScenesScreen(navController = navController)
+            ScenesScreen(navController = navController, myDb)
         }
         composable(route = Screen.DeviceStatusScreen.route) {
             DeviceStatusScreen(

@@ -5,6 +5,5 @@ data class Result<T>(
     val code: Int?,
     val msg: String?,
     val success: Boolean,
-    val t: Long,
-    val tid: String
+    val t: Long
 )
