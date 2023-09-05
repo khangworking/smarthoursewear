@@ -1,6 +1,7 @@
 package com.example.mysmarthouse.utils
 
 import android.util.Log
+import retrofit2.http.Body
 import java.nio.charset.StandardCharsets
 import java.security.InvalidKeyException
 import java.security.MessageDigest
@@ -14,18 +15,18 @@ class Helper {
             return System.currentTimeMillis()
         }
 
-        fun stringToSign(signUrl: String, method: String = "GET"): String {
+        fun stringToSign(signUrl: String, method: String = "GET", contentBody:String = ""): String {
             return listOf(
                 method,
-                contentHash(),
+                contentHash(contentBody),
                 "",
                 signUrl
             ).joinToString(separator = "\n")
         }
 
-        private fun contentHash(): String {
+        private fun contentHash(contentBody: String = ""): String {
             val messageDigest = MessageDigest.getInstance("SHA-256")
-            val hashBytes = messageDigest.digest("".toByteArray(StandardCharsets.UTF_8))
+            val hashBytes = messageDigest.digest(contentBody.toByteArray(StandardCharsets.UTF_8))
             return hashBytes.joinToString("") { "%02x".format(it) }
         }
 
