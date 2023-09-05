@@ -42,5 +42,5 @@ interface DeviceApi {
         @Header(Constants.TuyaHeaderKeys.ACCESS_TOKEN) accessToken: String,
         @Path("device_id") deviceId: String,
         @Body commands: DeviceCommand
-    ): Response<Any>
+    ): Response<Result<Boolean>>
 }

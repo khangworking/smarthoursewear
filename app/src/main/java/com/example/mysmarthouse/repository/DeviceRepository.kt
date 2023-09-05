@@ -77,7 +77,7 @@ class DeviceRepository(private val database: HouseDatabase) {
             deviceId = deviceTuyaId,
             commands = requestBody
         )
-        Log.d(Helper.logTagName(), response.toString())
+        Log.d(Helper.logTagName(), response.body().toString())
     }
 
     private suspend fun fetchAndSaveDevices() {
