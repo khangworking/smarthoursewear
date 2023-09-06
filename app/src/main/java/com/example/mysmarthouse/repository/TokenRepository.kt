@@ -42,7 +42,7 @@ class TokenRepository(private val dao: SettingDao) {
             dao.upsertSetting(setting)
         } else {
             setting = Setting(
-                key = Constants.SettingKeys.ACCESS_TOKEN,
+                key = key,
                 value = value
             )
             dao.upsertSetting(setting)
