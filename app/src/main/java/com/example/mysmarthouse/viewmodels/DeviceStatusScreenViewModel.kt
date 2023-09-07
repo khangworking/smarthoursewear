@@ -16,12 +16,13 @@ class DeviceStatusScreenViewModel(
     private val database: HouseDatabase,
     private val deviceId: String
 ): ViewModel() {
-    var loading by mutableStateOf(true)
+    var loading by mutableStateOf(false)
         private set
     var statuses by mutableStateOf<List<DeviceStatus>>(emptyList())
         private set
 
     fun loadStatuses() {
+        loading = true
         viewModelScope.launch {
             statuses = DeviceRepository(database = database).getStatuses(deviceId = deviceId)
             loading = false

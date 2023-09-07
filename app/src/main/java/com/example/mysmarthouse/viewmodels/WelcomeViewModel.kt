@@ -1,6 +1,9 @@
 package com.example.mysmarthouse.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -20,12 +23,14 @@ import kotlinx.coroutines.launch
 class WelcomeViewModel(
     private val dao: SettingDao
 ):ViewModel() {
-    private val _isReady = MutableStateFlow(false)
-    val isReady = _isReady.asStateFlow()
+    var loading by mutableStateOf(false)
+        private set
 
     fun refreshToken() {
+        loading = true
         viewModelScope.launch {
             TokenRepository(dao).reloadToken()
+            loading = false
         }
     }
 }

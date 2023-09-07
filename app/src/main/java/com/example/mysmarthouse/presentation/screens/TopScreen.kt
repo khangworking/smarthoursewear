@@ -26,6 +26,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.ChipDefaults
+import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.ScalingLazyColumn
@@ -76,16 +77,12 @@ fun TopScreen(navController: NavController, myDb: HouseDatabase) {
                         contentColor = Color.White
                     )
                 ) {
-                    Icon(Icons.Rounded.Refresh, null)
-                }
-                Button(
-                    onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.DarkGray,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Icon(Icons.Rounded.Home, null)
+                    if (viewModel.loading) {
+                        CircularProgressIndicator()
+                    } else {
+                        Icon(Icons.Rounded.Refresh, null)
+                    }
+
                 }
             }
         }

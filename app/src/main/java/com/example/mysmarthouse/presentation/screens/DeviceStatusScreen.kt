@@ -108,10 +108,15 @@ fun StatusChip(item: DeviceStatus, deviceTuyaId: String, viewModel: DeviceStatus
                 Text(text = item.code)
             },
             toggleControl = {
-                Image(
-                    imageVector = ToggleChipDefaults.switchIcon(currentValue),
-                    contentDescription = null
-                )
+                if (viewModel.loading) {
+                    CircularProgressIndicator()
+                } else {
+                    Image(
+                        imageVector = ToggleChipDefaults.switchIcon(currentValue),
+                        contentDescription = null
+                    )
+                }
+
             },
             modifier = Modifier.fillMaxWidth()
         )
