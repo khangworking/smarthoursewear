@@ -6,10 +6,17 @@
 
 package com.example.mysmarthouse.presentation
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.wear.compose.material.Text
 import com.example.mysmarthouse.dao.HouseDatabase
 import com.example.mysmarthouse.presentation.theme.MySmartHouseTheme
 
@@ -19,8 +26,25 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         myDb = HouseDatabase.getInstance(this)
         setContent {
-            WearApp(myDb)
+            if (isOnline()) {
+                WearApp(myDb)
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Internet please!!")
+                }
+            }
+
         }
+    }
+
+    fun isOnline(): Boolean {
+        val connMgr = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
     }
 }
 
