@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,8 +26,11 @@ import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.rememberScalingLazyListState
 import com.example.mysmarthouse.dao.HouseDatabase
+import com.example.mysmarthouse.models.Scene
 import com.example.mysmarthouse.viewmodels.SceneScreenViewModel
 import com.example.mysmarthouse.viewmodels.SceneScreenViewModelFactory
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ScenesScreen(navController: NavController, database: HouseDatabase) {
@@ -60,20 +67,27 @@ fun ScenesScreen(navController: NavController, database: HouseDatabase) {
         ) {
             for (scene in viewModel.scenes) {
                 item {
-                    Chip(
-                        onClick = { viewModel.execScene(scene.tuyaId) },
-                        colors = ChipDefaults.chipColors(
-                            backgroundColor = Color.DarkGray,
-                            contentColor = Color.White,
-                            iconColor = Color.White
-                        ),
-                        label = {
-                            Text(text = scene.name)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    SceneChip(viewModel = viewModel, scene = scene)
                 }
             }
         }
     }
+}
+
+@Composable
+fun SceneChip(viewModel: SceneScreenViewModel, scene: Scene) {
+    Chip(
+        onClick = {
+            viewModel.execScene(scene.tuyaId)
+        },
+        colors = ChipDefaults.chipColors(
+            backgroundColor = Color.DarkGray,
+            contentColor = Color.White,
+            iconColor = Color.White
+        ),
+        label = {
+            Text(text = scene.name)
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
 }

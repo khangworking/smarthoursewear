@@ -22,7 +22,7 @@ class SceneRepository(private val database: HouseDatabase) {
         return sceneDao.getAllScenes()
     }
 
-    suspend fun execScene(sceneId: String) {
+    suspend fun execScene(sceneId: String): Boolean {
         val time = Helper.getTime()
         var token = TokenRepository(database.dao).getToken()
         val sign = Helper.sign(
@@ -44,14 +44,13 @@ class SceneRepository(private val database: HouseDatabase) {
         )
         if (!response.isSuccessful) {
             Log.d(Helper.logTagName(), "Fail to exec")
-            return
+            return false
         }
 
         if (response.body()!!.result!!) {
-            Log.d(Helper.logTagName(), "Success")
-        } else {
-            Log.d(Helper.logTagName(), "Cannot exec")
+            return response.body()!!.result!!
         }
+        return false
     }
 
     suspend fun fetchScenes(): Response<Result<List<Scene>>> {
