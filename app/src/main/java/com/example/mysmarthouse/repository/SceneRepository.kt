@@ -22,6 +22,13 @@ class SceneRepository(private val database: HouseDatabase) {
         return sceneDao.getAllScenes()
     }
 
+    suspend fun upsertScenes(): List<com.example.mysmarthouse.models.Scene> {
+        val sceneDao = database.sceneDao
+        sceneDao.deleteAll()
+        fetchAndSaveRecords()
+        return sceneDao.getAllScenes()
+    }
+
     suspend fun execScene(sceneId: String): Boolean {
         val time = Helper.getTime()
         var token = TokenRepository(database.dao).getToken()
@@ -94,7 +101,9 @@ class SceneRepository(private val database: HouseDatabase) {
         if (record == null) {
             record = com.example.mysmarthouse.models.Scene(
                 tuyaId = scene.id,
-                name = scene.name
+                name = scene.name,
+                enabled = scene.enabled,
+                status = scene.status
             )
         }
         sceneDao.upsertScene(record)

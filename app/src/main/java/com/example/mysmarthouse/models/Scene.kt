@@ -10,5 +10,7 @@ import androidx.room.PrimaryKey
 data class Scene(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "tuya_id") var tuyaId: String,
-    @ColumnInfo(name = "name") var name: String
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "enabled", defaultValue = "true") var enabled: Boolean = true,
+    @ColumnInfo(name = "status", defaultValue = "1") var status: Int = 1
 )

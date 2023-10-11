@@ -11,10 +11,10 @@ import com.example.mysmarthouse.models.Setting
 
 @Database(
     entities = [Setting::class, Device::class, Scene::class],
-    version = 7,
+    version = 8,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration(6,7)
+        AutoMigration(7,8)
     ]
 )
 abstract class HouseDatabase: RoomDatabase() {

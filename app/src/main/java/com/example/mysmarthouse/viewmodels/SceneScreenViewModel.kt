@@ -20,10 +20,21 @@ class SceneScreenViewModel(
     var scenes by mutableStateOf<List<Scene>>(emptyList())
         private set
 
+    var resyncing by mutableStateOf(false)
+        private set
+
     fun loadScenes() {
         viewModelScope.launch {
             scenes = SceneRepository(database).loadScenes()
             loading = false
+        }
+    }
+
+    fun resync() {
+        resyncing = true
+        viewModelScope.launch {
+            scenes = SceneRepository(database).upsertScenes()
+            resyncing = false
         }
     }
 

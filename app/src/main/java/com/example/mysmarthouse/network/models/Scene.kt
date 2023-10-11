@@ -7,5 +7,11 @@ data class Scene(
     val id: String,
 
     @SerializedName("name")
-    val name: String
+    val name: String,
+
+    @SerializedName("enabled")
+    val enabled: Boolean,
+
+    @SerializedName("status")
+    val status: Int
 )

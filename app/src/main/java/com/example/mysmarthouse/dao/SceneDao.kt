@@ -15,4 +15,7 @@ interface SceneDao {
 
     @Query("SELECT * FROM scenes WHERE tuya_id LIKE :id LIMIT 1")
     suspend fun findByTuyaId(id: String): Scene
+
+    @Query("DELETE FROM scenes")
+    suspend fun deleteAll()
 }
