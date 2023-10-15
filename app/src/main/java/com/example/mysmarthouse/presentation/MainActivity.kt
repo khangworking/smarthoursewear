@@ -17,14 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.wear.compose.material.Text
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.example.mysmarthouse.dao.HouseDatabase
 import com.example.mysmarthouse.presentation.theme.MySmartHouseTheme
+import com.example.mysmarthouse.worker.RefreshTokenWorker
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     lateinit var myDb: HouseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myDb = HouseDatabase.getInstance(this)
+        val refreshRequest = PeriodicWorkRequestBuilder<RefreshTokenWorker>(30, TimeUnit.MINUTES).build()
+        WorkManager.getInstance(this).enqueue(refreshRequest)
         setContent {
             if (isOnline()) {
                 WearApp(myDb)
