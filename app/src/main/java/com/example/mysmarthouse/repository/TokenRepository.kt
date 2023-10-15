@@ -39,11 +39,13 @@ class TokenRepository(private val dao: SettingDao) {
         var setting = dao.find(key)
         if (setting != null) {
             setting.value = value
+            setting.lastUpdate = System.currentTimeMillis().toString()
             dao.upsertSetting(setting)
         } else {
             setting = Setting(
                 key = key,
-                value = value
+                value = value,
+                lastUpdate = System.currentTimeMillis().toString()
             )
             dao.upsertSetting(setting)
         }

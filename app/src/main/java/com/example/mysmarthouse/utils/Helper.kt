@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets
 import java.security.InvalidKeyException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -72,6 +74,12 @@ class Helper {
 
         fun logTagName(): String {
             return "MyAppLog"
+        }
+
+        fun millisecondsToDateTime(milliseconds: Long, format: String): String {
+            val date = Date(milliseconds)
+            val sdf = SimpleDateFormat(format)
+            return sdf.format(date)
         }
     }
 }

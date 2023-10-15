@@ -8,6 +8,7 @@ import com.example.mysmarthouse.dao.HouseDatabase
 import com.example.mysmarthouse.presentation.screens.DeviceStatusScreen
 import com.example.mysmarthouse.presentation.screens.DevicesScreen
 import com.example.mysmarthouse.presentation.screens.ScenesScreen
+import com.example.mysmarthouse.presentation.screens.SettingScreen
 import com.example.mysmarthouse.presentation.screens.TopScreen
 
 @Composable
@@ -32,6 +33,9 @@ fun Navigation(myDb: HouseDatabase) {
                 database = myDb,
                 deviceTuyaId = it.arguments?.getString("deviceId")!!
             )
+        }
+        composable(route = Screen.SettingScreen.route) {
+            SettingScreen(navController = navController, myDb = myDb)
         }
     }
 }
