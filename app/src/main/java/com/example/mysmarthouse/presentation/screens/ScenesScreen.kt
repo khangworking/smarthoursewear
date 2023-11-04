@@ -1,6 +1,5 @@
 package com.example.mysmarthouse.presentation.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,8 +34,6 @@ import com.example.mysmarthouse.dao.HouseDatabase
 import com.example.mysmarthouse.models.Scene
 import com.example.mysmarthouse.viewmodels.SceneScreenViewModel
 import com.example.mysmarthouse.viewmodels.SceneScreenViewModelFactory
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ScenesScreen(navController: NavController, database: HouseDatabase) {
@@ -104,9 +101,14 @@ fun ScenesScreen(navController: NavController, database: HouseDatabase) {
 
 @Composable
 fun SceneChip(viewModel: SceneScreenViewModel, scene: Scene) {
+    var clicking by remember {
+        mutableStateOf(false)
+    }
     Chip(
         onClick = {
+            clicking = true
             viewModel.execScene(scene.tuyaId)
+            clicking = false
         },
         colors = ChipDefaults.chipColors(
             backgroundColor = Color.DarkGray,
@@ -119,7 +121,10 @@ fun SceneChip(viewModel: SceneScreenViewModel, scene: Scene) {
         secondaryLabel = {
             if (scene.status == 2) {
                 Text(text = "Expired")
+            } else if (clicking) {
+                Text(text = "Execting")
             }
+
         },
         modifier = Modifier.fillMaxWidth()
     )
